@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mohan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&display=swap" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: "SuperFunky";
+            src: url("SuperFunky-lgmWw.ttf");
+        }
+        body {
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: url('top-view-chalk-board.jpg');
+            background-size: 100%;
+            font-family: "SuperFunky";
+            font-weight: 400;
+            font-style: normal;
+            overflow: hidden;
+        }
+
+        .blackout {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            transition: opacity 1s ease;
+        }
+
+        .container {
+            text-align: center;
+            font-size: 3.5rem;
+            user-select: none;
+            display: none;
+        }
+
+        .typewriter {
+            white-space: nowrap;
+            overflow: hidden;
+            width: 0;
+            animation: typing 3s steps(30) forwards;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            -moz-user-select: none;
+        }
+
+        @keyframes typing {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%;
+            }
+        }
+
+        .button {
+            padding: 20px 40px;
+            font-size: 2rem;
+            color: white;
+            background-color: #e5586e;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-family: "SuperFunky";
+        }
+
+        .button:hover {
+            background-color: #d0455a;
+        }
+    </style>
+</head>
+<body>
+    <div class="blackout" id="blackout">
+        <button class="button" id="startButton">Get into Class</button>
+    </div>
+    <div class="container" id="mainContent">
+        <span id="name"></span>
+    </div>
+
+    <audio id="backgroundMusic" loop>
+        <source src="PremaluBgm.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        const names = ["Mohan", "Mirudhubasini", "Hemanth"];
+        const colors = ["#e5586e", "#d0c448", "#4587a7"];
+        let index = 0;
+
+        function typeWriterEffect(name, callback) {
+            const nameElement = document.getElementById('name');
+            nameElement.classList.add('typewriter');
+            nameElement.innerHTML = '';
+            let i = 0;
+            const typingInterval = setInterval(() => {
+                if (i < name.length) {
+                    nameElement.innerHTML += name.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(typingInterval);
+                    setTimeout(callback, 2000);
+                }
+                nameElement.style.color = colors[index];
+            }, 150);
+        }
+
+        function showNames() {
+            typeWriterEffect(names[index], () => {
+                index = (index + 1) % names.length;
+                showNames();
+            });
+        }
+
+        function startClass() {
+            const blackout = document.getElementById('blackout');
+            const mainContent = document.getElementById('mainContent');
+            const music = document.getElementById('backgroundMusic');
+
+            blackout.style.opacity = '0';
+            setTimeout(() => {
+                blackout.style.display = 'none';
+                mainContent.style.display = 'block';
+                music.play();
+                showNames();
+            }, 1000);
+        }
+
+        document.getElementById('startButton').onclick = startClass;
+    </script>
+</body>
+</html>
